@@ -1,6 +1,7 @@
 # Ignore files
 *.env
 accessToken.py
+auth.py
 
 # Ignore dependency folders
 node_modules/
