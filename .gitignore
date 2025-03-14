@@ -2,6 +2,7 @@
 *.env
 accessToken.py
 auth.py
+tokens.txt
 
 # Ignore dependency folders
 node_modules/
