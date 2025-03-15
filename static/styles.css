@@ -38,7 +38,6 @@ li, a, button {
 
 #navbar__logo {
     background-color: #fff;
-    /* background-image: linear-gradient(to top, #CBE2B5 0%, #E7FBE6 100%); */
     background-size: 100%;
     -webkit-background-clip: text;
     -moz-background-clip: text;

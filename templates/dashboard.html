@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>chromSort</title>
 
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <nav class="navbar">
@@ -31,7 +31,13 @@
         </div>
     </nav>
 
-
+    <div class="main__container">
+        <h1>Welcome to chromSort</h1>
+        <h2>Your Playlists</h2>
+        <ul id="playlists"></ul>
+    </div>
+    
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
 
