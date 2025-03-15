@@ -35,6 +35,44 @@
         <h1>Your Playlists</h1>
         <ul id="playlists"></ul>
     </div>
+
+    <div id="feed">
+        <div>
+            <div class="card card-text-list ">
+                <div class="cardBody">
+                    <div class="textlistView">
+                        <div class="header flex-container" style="align-items: flex-end;">
+                            <div class="titleSection" style="flex-grow: 5;">
+                                <h1>Your Playlists
+                                    <span class="refreshButton" tooltip="Not seeing what you expect? Try clicking here to refresh." tooltip-position="right">
+                                        <img src="/static/media/icon-refresh-bk.61770d7d.svg" alt="Refresh"></span>
+                                    </h1>
+                                </div>
+                                <div class="selectLight" style="margin: 0px 0px 10px 16px;">
+                                    <input class="search-bar" placeholder="Filter" type="text" value="">
+                                </div>
+                            </div>
+                            <div class="info vertical-space-below-sm">
+                                <span role="link" class="view-link time-toggle ">All</span>
+                                    <span role="link" class="view-link time-toggle time-toggle-selected">Playlists You Own</span>
+                                    <span role="link" class="view-link time-toggle ">Playlists You Follow</span>
+                                </div>
+                                <div class="body">
+                                    <div class="fade">
+
+                                    </div>
+                                    <div class="innerScroll">
+                                        <div style="column-gap: 16px; column-count: 3;">
+                                            <div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
     
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
