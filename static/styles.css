@@ -5,8 +5,20 @@
     padding: 0;
 }
 
-li, a, button {
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     font-family: source-code-pro,Menlo,Monaco,Consolas,Courier New,monospace;
+    background-image: linear-gradient(to right bottom, #53cde2, #71d4e6, #8adceb, #a1e3ef, #b6eaf4, #c2eef6, #cdf1f9, #d8f5fb, #ddf6fb, #e3f7fc, #e8f8fc, #edf9fc);
+}
+
+li, a, button {
     font-weight: 500;
     font-size: 16px;
     color: #fff;
@@ -14,7 +26,7 @@ li, a, button {
 }
 
 .navbar {
-    background-color: #3f3d58;
+    background-color: #005792;
     height: 80px;
     display: flex;
     justify-content: center;
@@ -23,6 +35,7 @@ li, a, button {
     position: sticky;
     top: 0;
     z-index: 999;
+    margin-bottom: 2rem;
 }
 
 .navbar__container {
@@ -73,19 +86,13 @@ li, a, button {
     color: #0088a9;
 }
 
-button {
-    padding: 9px 25px;
-    background-color: rgba(0, 136, 169, 1);
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease 0s;
-    border-radius: 10px;
-}
-
-button:hover {
-    background-color: rgba(0, 136, 169, 0.8);
-}
-
 .main__container {
-    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+h1 {
+    font-size: 2rem;
+    color: #005792;
 }
