@@ -94,7 +94,7 @@ li, a, button {
     justify-content: center;
     align-items: center;
     position: absolute;
-    top: 35%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
@@ -113,8 +113,8 @@ h1 {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1rem;  /* Adds space between buttons */
-    margin-bottom: 1rem; /* Spacing below buttons */
+    gap: 1rem; 
+    margin-bottom: 1rem;
 }
 
 .playlist__buttons button { 
@@ -124,6 +124,7 @@ h1 {
     background: #60a8b7;
     color: #fff;
     cursor: pointer;
+    font-family: source-code-pro,Menlo,Monaco,Consolas,Courier New,monospace;
 }
 
 .playlist__buttons button:hover {
@@ -140,9 +141,26 @@ h1 {
 
 #playlists__section {
     width: 50rem;
-    height: 10rem; 
+    height: 20rem; 
     background: #E7EEEF;
     overflow-y: auto;
     border: 1px solid #ccc; 
     border-radius: 10px;
 }
+
+#playlists__list {
+    color: #000;
+    padding-top: 1rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-bottom: 1rem;
+    column-gap: 16px; 
+    column-count: 3;
+}
+
+#playlists__list li {
+    color: #000;
+    list-style-type: none;
+    padding-top: 5px;
+    font-size: 14px;
+}   
