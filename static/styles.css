@@ -15,7 +15,8 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
     font-family: source-code-pro,Menlo,Monaco,Consolas,Courier New,monospace;
-    background-image: linear-gradient(to right bottom, #53cde2, #71d4e6, #8adceb, #a1e3ef, #b6eaf4, #c2eef6, #cdf1f9, #d8f5fb, #ddf6fb, #e3f7fc, #e8f8fc, #edf9fc);
+    /* background-image: linear-gradient(to right bottom, #53cde2, #71d4e6, #8adceb, #a1e3ef, #b6eaf4, #c2eef6, #cdf1f9, #d8f5fb, #ddf6fb, #e3f7fc, #e8f8fc, #edf9fc); */
+    background-color: #D0DDDF;
 }
 
 li, a, button {
@@ -26,7 +27,7 @@ li, a, button {
 }
 
 .navbar {
-    background-color: #005792;
+    background-color: #155563;
     height: 80px;
     display: flex;
     justify-content: center;
@@ -83,16 +84,65 @@ li, a, button {
 }
 
 .navbar__links:hover{
-    color: #0088a9;
+    color: #48D1CC;
 }
+
 
 .main__container {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.playlist__text {
+    text-align: center;
+    margin-bottom: 1rem;
 }
 
 h1 {
     font-size: 2rem;
-    color: #005792;
+    color: #155563;
+}
+
+.playlist__buttons { 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;  /* Adds space between buttons */
+    margin-bottom: 1rem; /* Spacing below buttons */
+}
+
+.playlist__buttons button { 
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    background: #60a8b7;
+    color: #fff;
+    cursor: pointer;
+}
+
+.playlist__buttons button:hover {
+    background: #48D1CC;
+    transition: all 0.3s ease;
+}
+
+.feed {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem; 
+}
+
+#playlists__section {
+    width: 50rem;
+    height: 10rem; 
+    background: #E7EEEF;
+    overflow-y: auto;
+    border: 1px solid #ccc; 
+    border-radius: 10px;
 }
