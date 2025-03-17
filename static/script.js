@@ -15,17 +15,9 @@ async function fetchPlaylists() {
 
         data.playlists.forEach(playlist => {
             let div = document.createElement("div");
-            // div.classList.add("playlist__item");
-            div.textContent = playlist.name;
+            div.textContent = playlist.name; 
 
-            // div.innerHTML = `
-            //     <img src="${playlist.images.length ? playlist.images[0].url : '/static/default.png'}" alt="${playlist.name}" class="playlist__image">
-            //     <h3>${playlist.name}</h3>
-            //     <p>${playlist.tracks.total} songs</p>
-            // `;
-
-            // div.textContent = playlist.name;
-            // li.onclick = () => sortPlaylist(playlist.id); 
+            div.onclick = () => popupCard(playlist.id); 
 
             playlistList.appendChild(div);
             count += 1;
@@ -51,6 +43,15 @@ function playlistsYouFollow() {
 
 function sortPlaylist(playlistId) {
     window.location.href = `http://localhost:8888/sort_playlist?playlist_id=${playlistId}`;
+}
+
+ function popupCard(playlistID) {
+    let popup = document.getElementById("playlist__card");
+    popup.style.display = "block";
+
+    let card = document.createElement("div");
+
+    popup.appendChild(card);
 }
 
 fetchPlaylists();   // calls when page loads
