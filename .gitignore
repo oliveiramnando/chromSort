@@ -1,7 +1,6 @@
 # Ignore files
 .env
 accessToken.py
-auth.py
 tokens.txt
 
 node_modules/
