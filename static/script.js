@@ -54,4 +54,4 @@ function sortPlaylist(playlistId) {
     popup.appendChild(card);
 }
 
-fetchPlaylists();   // calls when page loads
+fetchPlaylists();

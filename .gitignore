@@ -1,12 +1,15 @@
 # Ignore files
-*.env
+.env
 accessToken.py
 auth.py
 tokens.txt
 
-# Ignore dependency folders
 node_modules/
 vendor/
 
-# Ignore log files
+__pycache__/
+*.pyc
+*.pyo
+
+
 *.log
