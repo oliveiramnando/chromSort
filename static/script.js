@@ -71,17 +71,14 @@ async function fetchTracks(playlistId) {
 
     try {
         const url = `http://localhost:8888/get_tracks?playlist_id=${playlistId}`;
-        console.log("Attempting to fetch from URL:", url);
 
         const response = await fetch(url);
-        console.log("API request made, awaiting response...");
 
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
 
         const data = await response.json();
-        console.log("API response received:", data);
 
         let trackList = document.getElementById("playlist__tracks");
         trackList.innerHTML = "";
