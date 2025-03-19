@@ -153,22 +153,35 @@ def get_tracks():
     headers = {"Authorization": f"Bearer {access_token}"}
 
     tracks = []
-    next_url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks?limit=50"
+    next_url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks?limit=100"
 
     while next_url:
         response = requests.get(next_url, headers=headers)
         data = response.json()
 
         if "items" in data:
-            tracks.extend(data["items"])
+            # tracks.extend(data["items"])
+
+            for item in data["items"]:
+                track = item.get("track")
+                if track:
+                    track_info = {
+                        "name": track.get("name"),
+                        "cover_url": track.get("album", {}).get("images", [{}])[0].get("url")
+                    }
+                    tracks.append(track_info)
+
 
         next_url = data.get("next")
 
     return jsonify({"tracks": tracks})
 
+@app.route("/sort_playlist")
+def sort_playlist():
+
+    return jsonify()
 
 
 if __name__ == "__main__":
     print("Listening on port 8888...")
     app.run(port=8888, debug=True)
-

@@ -42,32 +42,73 @@ function playlistsYouFollow() {
 }
 
 async function fetchTracks(playlistId) {
+    // try {
+    //     const response = await fetch(`http://localhost:8888/get_tracks?playlist_id=${playlistId}`);
+    //     const data = await response.json();
+
+    //     let trackList = document.getElementById("playlist__tracks");
+    //     trackList.innerHTML = "";
+
+    //     if (!data.tracks || data.tracks.length === 0) {
+    //         trackList.innerHTML = "<p>No tracks found.</p>";
+    //         return;
+    //     }
+
+    //     data.tracks.forEach(track => {
+    //         if (!track.name || !track.cover_url) return; 
+
+    //         let div = document.createElement("div");
+    //         div.textContent = track.name;
+    //         div.style.backgroundImage = `url(${track.cover_url})`;
+
+    //         trackList.appendChild(div);
+    //     });
+    // }
+    // catch(error) {
+    //     console.error(error);
+    // }
+    console.log("fetchTracks called with playlistId:", playlistId);
+
     try {
-        const response = await fetch(`http://localhost:8888/get_tracks?playlist_id=${playlistId}`);
+        const url = `http://localhost:8888/get_tracks?playlist_id=${playlistId}`;
+        console.log("Attempting to fetch from URL:", url);
+
+        const response = await fetch(url);
+        console.log("API request made, awaiting response...");
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
         const data = await response.json();
+        console.log("API response received:", data);
 
         let trackList = document.getElementById("playlist__tracks");
         trackList.innerHTML = "";
 
-        if (!data.tracks || data.tracks.length === 0) {
+        if (!data.tracks || !Array.isArray(data.tracks) || data.tracks.length === 0) {
             trackList.innerHTML = "<p>No tracks found.</p>";
             return;
         }
 
         data.tracks.forEach(track => {
-            let div = document.createElement("div");
-            div.textContent = track.track.name; 
+            if (!track || !track.name || !track.cover_url) {
+                console.warn("Skipping invalid track:", track);
+                return;
+            }
 
-            div.onclick = () => chromeSort(track.track.id); 
+            let div = document.createElement("div");
+            div.textContent = track.name;
+            div.style.backgroundImage = `url(${track.cover_url})`;
 
             trackList.appendChild(div);
         });
     }
-    catch(error) {
-        console.error(error);
+    catch (error) {
+        console.error("Error fetching tracks:", error);
     }
+    
 }
-
 
 function sortPlaylist(playlistId) {
     window.location.href = `http://localhost:8888/sort_playlist?playlist_id=${playlistId}`;
@@ -85,7 +126,8 @@ function popupCard(playlistID) {
 
             data.tracks.forEach(track => {
                 let div = document.createElement("div");
-                div.textContent = track.track.name;
+                // div.textContent = track.track.name;
+                div.style.backgroundImage = `url(${track.cover_url})`;
                 trackList.appendChild(div);
             });
         })
