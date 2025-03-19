@@ -130,10 +130,6 @@ def get_playlists():
             playlists.extend(data["items"])
 
         next_url = data.get("next")
-        
-        
-    # response = requests.get("https://api.spotify.com/v1/me/playlists", headers=headers)
-    # playlists = response.json()
 
     return jsonify({"playlists": playlists})
 
