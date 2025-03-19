@@ -41,17 +41,56 @@ function playlistsYouFollow() {
     
 }
 
+async function fetchTracks(playlistId) {
+    try {
+        const response = await fetch(`http://localhost:8888/get_tracks?playlist_id=${playlistId}`);
+        const data = await response.json();
+
+        let trackList = document.getElementById("playlist__tracks");
+        trackList.innerHTML = "";
+
+        if (!data.tracks || data.tracks.length === 0) {
+            trackList.innerHTML = "<p>No tracks found.</p>";
+            return;
+        }
+
+        data.tracks.forEach(track => {
+            let div = document.createElement("div");
+            div.textContent = track.track.name; 
+
+            div.onclick = () => chromeSort(track.track.id); 
+
+            trackList.appendChild(div);
+        });
+    }
+    catch(error) {
+        console.error(error);
+    }
+}
+
+
 function sortPlaylist(playlistId) {
     window.location.href = `http://localhost:8888/sort_playlist?playlist_id=${playlistId}`;
 }
 
- function popupCard(playlistID) {
+function popupCard(playlistID) {
     let popup = document.getElementById("playlist__card");
     popup.style.display = "block";
 
-    let card = document.createElement("div");
+    fetch(`http://localhost:8888/get_tracks?playlist_id=${playlistID}`)
+        .then(response => response.json())
+        .then(data => {
+            let trackList = document.getElementById("playlist__tracks");
+            trackList.innerHTML = "";
 
-    popup.appendChild(card);
+            data.tracks.forEach(track => {
+                let div = document.createElement("div");
+                div.textContent = track.track.name;
+                trackList.appendChild(div);
+            });
+        })
+        .catch(error => console.error(error));
 }
+
 
 fetchPlaylists();

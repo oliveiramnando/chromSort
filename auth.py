@@ -138,6 +138,35 @@ def get_playlists():
     return jsonify({"playlists": playlists})
 
 
+@app.route("/get_tracks")
+def get_tracks():
+    """Fetch tracks from a specific playlist"""
+    
+    playlist_id = request.args.get("playlist_id")
+    if not playlist_id:
+        return jsonify({"error": "Missing playlist_id"}), 400
+    
+    with open("tokens.txt", "r") as f:
+        tokens = dict(line.strip().split("=") for line in f)
+
+    access_token = tokens.get("ACCESS_TOKEN")
+    headers = {"Authorization": f"Bearer {access_token}"}
+
+    tracks = []
+    next_url = f"https://api.spotify.com/v1/playlists/{playlist_id}/tracks?limit=50"
+
+    while next_url:
+        response = requests.get(next_url, headers=headers)
+        data = response.json()
+
+        if "items" in data:
+            tracks.extend(data["items"])
+
+        next_url = data.get("next")
+
+    return jsonify({"tracks": tracks})
+
+
 
 if __name__ == "__main__":
     print("Listening on port 8888...")
