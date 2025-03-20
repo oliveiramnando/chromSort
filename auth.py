@@ -6,6 +6,12 @@ import urllib.parse
 from dotenv import load_dotenv
 from flask import Flask, redirect, request, jsonify, make_response, render_template
 
+import numpy as np
+
+import math
+import colorsys
+import cv2
+
 load_dotenv()
 
 CLIENT_ID = os.getenv("SPOTIFY_CLIENT_ID")
@@ -15,11 +21,15 @@ TOKEN_URL = "https://accounts.spotify.com/api/token"
 
 app = Flask(__name__)
 
+tracks_cache = {}
+
 
 def generate_random_string(length=16):
     return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
 
+
 STATE_KEY = "spotify_auth_state"
+
 
 @app.route("/login")
 def login():
@@ -38,6 +48,7 @@ def login():
     ))
     response.set_cookie(STATE_KEY, state)
     return response
+
 
 @app.route("/callback")
 def callback():
@@ -81,10 +92,12 @@ def callback():
     # Redirect to frontend to display playlists
     return redirect("/dashboard")
 
+
 @app.route("/dashboard")
 def dashboard():
     return render_template("dashboard.html")
     
+
 @app.route("/refresh_token")
 def refresh_token():
     """ Refresh the access token using the refresh token """
@@ -156,26 +169,103 @@ def get_tracks():
         data = response.json()
 
         if "items" in data:
-            # tracks.extend(data["items"])
-
             for item in data["items"]:
                 track = item.get("track")
                 if track:
                     track_info = {
+                        "id": track.get("id"),
                         "name": track.get("name"),
                         "cover_url": track.get("album", {}).get("images", [{}])[0].get("url")
                     }
                     tracks.append(track_info)
 
-
         next_url = data.get("next")
 
+    tracks_cache[playlist_id] = {"tracks": tracks}
     return jsonify({"tracks": tracks})
+
 
 @app.route("/sort_playlist")
 def sort_playlist():
+    """Sorts current selected playlistt"""
+    
+    playlist_id = request.args.get("playlist_id")
+    if not playlist_id:
+        return jsonify({"error": "Missing playlist_id"}), 400
+    
+    with open("tokens.txt", "r") as f:
+        tokens = dict(line.strip().split("=") for line in f)
 
-    return jsonify()
+    access_token = tokens.get("ACCESS_TOKEN")
+    headers = {"Authorization": f"Bearer {access_token}"}
+
+    tracksToSort = tracks_cache[playlist_id]["tracks"]
+    sortedTracks = sortTracks(tracksToSort)
+
+    return jsonify({"sortedTracks": sortedTracks})
+
+
+def sortTracks(tracks):
+    track_list = []
+    for track in tracks:
+        trackId = track["id"]
+        trackName = track["name"]
+        track_cover_url = track["cover_url"]
+
+        mostDominantColor = extract_dominant_color()
+
+        track_info = [trackId, trackName, track_cover_url, mostDominantColor]
+        track_list.append(track_info)
+    
+
+
+    return track_list
+
+def extract_dominant_color(image_url, k=3):
+    try:
+        response = requests.get(image_url)
+
+        image = np.asarray(bytearray(response.content), dtype=np.uint8)
+        image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+
+        # Resize for faster processing (optional)
+        image = cv2.resize(image, (100, 100))
+
+        pixels = image.reshape(-1, 3).astype(np.float32)
+
+        criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
+        _, labels, centers = cv2.kmeans(pixels, k, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
+
+        cluster_sizes = np.zeros(k)
+
+        for label in labels.flatten():
+            cluster_sizes[label] += 1
+
+        most_dominant_cluster_index = np.argmax(cluster_sizes)
+
+        most_dominant_color = tuple(map(int, centers[most_dominant_cluster_index]))
+
+        return most_dominant_color
+
+    except Exception as e:
+        print(f"Error processing {image_url}: {e}")
+        return None
+
+
+def step(r, g, b, repetitions=1):
+    lum = math.sqrt(0.241 * r + 0.691 * g + 0.068 * b) 
+
+    h, s, v = colorsys.rgb_to_hsv(r / 255.0, g / 255.0, b / 255.0) 
+
+    h2 = int(h * repetitions)
+    lum2 = int(lum * repetitions)
+    v2 = int(v * repetitions)
+
+    if h2 % 2 == 1:
+        v2 = repetitions - v2
+        lum2 = repetitions - lum2 
+
+    return (h2, lum2, v2)
 
 
 if __name__ == "__main__":

@@ -163,7 +163,7 @@ h1 {
 #playlist__card {
     display: none;
     width: 50rem;
-    height: 20rem; 
+    /* height: 20rem;  */
     background: #E7EEEF;
     overflow-y: auto;
     border: 1px solid #ccc; 

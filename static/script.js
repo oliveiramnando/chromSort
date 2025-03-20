@@ -1,4 +1,7 @@
 
+let cachedPlaylists = [];
+let cachedTracks = [];
+
 async function fetchPlaylists() {
     try {
         const response = await fetch("http://localhost:8888/get_playlists");
@@ -44,7 +47,6 @@ function playlistsYouFollow() {
 async function fetchTracks(playlistId) {
     try {
         const url = `http://localhost:8888/get_tracks?playlist_id=${playlistId}`;
-
         const response = await fetch(url);
 
         if (!response.ok) {
@@ -52,6 +54,7 @@ async function fetchTracks(playlistId) {
         }
 
         const data = await response.json();
+        cachedTracks = data.tracks;
 
         let trackList = document.getElementById("playlist__tracks");
         trackList.innerHTML = "";
@@ -79,8 +82,19 @@ async function fetchTracks(playlistId) {
     }
 }
 
-function sortPlaylist(playlistId) {
-    window.location.href = `http://localhost:8888/sort_playlist?playlist_id=${playlistId}`;
+async function sortPlaylist(playlistId) {
+    // window.location.href = `http://localhost:8888/sort_playlist?playlist_id=${playlistId}`;
+    try {
+        const url = `http://localhost:8888/sort_playlist?playlist_id=${playlistId}`;
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+    }
+    catch (error) {
+        console.error("Error fetching tracks:", error);
+    }
 }
 
 function popupCard(playlistID) {
