@@ -49,6 +49,8 @@ async function fetchTracks(playlistId) {
         const url = `http://localhost:8888/get_tracks?playlist_id=${playlistId}`;
         const response = await fetch(url);
 
+        console.log("fetching tracks");
+
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
@@ -76,6 +78,8 @@ async function fetchTracks(playlistId) {
 
             trackList.appendChild(div);
         });
+        
+        console.log("finished fetching");
     }
     catch (error) {
         console.error("Error fetching tracks:", error);
@@ -84,7 +88,7 @@ async function fetchTracks(playlistId) {
 
 async function sortPlaylist(playlistId) {
     try {
-        const url = `http://localhost:8888/sort_tracks?playlist_id=${playlistId}`;
+        const url = `http://localhost:8888/sort_playlist?playlist_id=${playlistId}`;
         const response = await fetch(url);
 
         if (!response.ok) {
@@ -93,11 +97,15 @@ async function sortPlaylist(playlistId) {
 
         const data = await response.json();
 
+        console.log(data);
+
         let trackList = document.getElementById("sorted__tracks");
 
         console.log("setting innerHTML to ''");
-        // trackList.innerHTML = "";
+        trackList.innerHTML = "";
 
+        //  NOTE: ITS NOT .tracks TRACKS ISNT A THINK ANYMORE BECAUSE I CHANGED IT
+        
         if (!data.tracks || !Array.isArray(data.tracks) || data.tracks.length === 0) {
             trackList.innerHTML = "<p>No tracks found.</p>";
             return;
@@ -149,24 +157,9 @@ function sortedPopUP(playlistID) {
     let popup = document.getElementById("chromSorted");
     popup.style.display = "block";
 
-    console.log("sort button got clicked")
+    console.log("sort button got clicked");
 
-    fetch(`http://localhost:8888/sort_playlist?playlist_id=${playlistID}`)
-        .then(response => response.json())
-        .then(data => {
-            let trackList = document.getElementById("sorted__tracks");
-
-            console.log("setting innerHTML to ''");
-            // trackList.innerHTML = "";
-            console.log("innerHTML set");
-
-            data.tracks.forEach(track => {
-                let div = document.createElement("div");
-                div.style.backgroundImage = `url(${track.cover_url})`;
-                trackList.appendChild(div);
-            });
-        })
-        .catch(error => console.error(error));
+    sortPlaylist(playlistID);
 }
 
 fetchPlaylists();
