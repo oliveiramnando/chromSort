@@ -83,14 +83,38 @@ async function fetchTracks(playlistId) {
 }
 
 async function sortPlaylist(playlistId) {
-    // window.location.href = `http://localhost:8888/sort_playlist?playlist_id=${playlistId}`;
     try {
-        const url = `http://localhost:8888/sort_playlist?playlist_id=${playlistId}`;
+        const url = `http://localhost:8888/sort_tracks?playlist_id=${playlistId}`;
         const response = await fetch(url);
 
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
+
+        const data = await response.json();
+
+        let trackList = document.getElementById("sorted__tracks");
+
+        console.log("setting innerHTML to ''");
+        // trackList.innerHTML = "";
+
+        if (!data.tracks || !Array.isArray(data.tracks) || data.tracks.length === 0) {
+            trackList.innerHTML = "<p>No tracks found.</p>";
+            return;
+        }
+
+        data.tracks.forEach(track => {
+            if (!track || !track.name || !track.cover_url) {
+                console.warn("Skipping invalid track:", track);
+                return;
+            }
+
+            let div = document.createElement("div");
+            div.textContent = track.name;
+            div.style.backgroundImage = `url(${track.cover_url})`;
+
+            trackList.appendChild(div);
+        });
     }
     catch (error) {
         console.error("Error fetching tracks:", error);
@@ -104,6 +128,11 @@ function popupCard(playlistID) {
     fetch(`http://localhost:8888/get_tracks?playlist_id=${playlistID}`)
         .then(response => response.json())
         .then(data => {
+            
+            let chromSortButton = document.getElementById("sortButton");
+
+            chromSortButton.onclick = () => sortedPopUP(playlistID);
+
             let trackList = document.getElementById("playlist__tracks");
             trackList.innerHTML = "";
 
@@ -116,5 +145,28 @@ function popupCard(playlistID) {
         .catch(error => console.error(error));
 }
 
+function sortedPopUP(playlistID) {
+    let popup = document.getElementById("chromSorted");
+    popup.style.display = "block";
+
+    console.log("sort button got clicked")
+
+    fetch(`http://localhost:8888/sort_playlist?playlist_id=${playlistID}`)
+        .then(response => response.json())
+        .then(data => {
+            let trackList = document.getElementById("sorted__tracks");
+
+            console.log("setting innerHTML to ''");
+            // trackList.innerHTML = "";
+            console.log("innerHTML set");
+
+            data.tracks.forEach(track => {
+                let div = document.createElement("div");
+                div.style.backgroundImage = `url(${track.cover_url})`;
+                trackList.appendChild(div);
+            });
+        })
+        .catch(error => console.error(error));
+}
 
 fetchPlaylists();

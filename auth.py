@@ -11,6 +11,7 @@ import numpy as np
 import math
 import colorsys
 import cv2
+import sys
 
 load_dotenv()
 
@@ -188,6 +189,8 @@ def get_tracks():
 @app.route("/sort_playlist")
 def sort_playlist():
     """Sorts current selected playlistt"""
+
+    print('backend begins to sort', file=sys.stderr)
     
     playlist_id = request.args.get("playlist_id")
     if not playlist_id:
@@ -202,6 +205,10 @@ def sort_playlist():
     tracksToSort = tracks_cache[playlist_id]["tracks"]
     sortedTracks = sortTracks(tracksToSort)
 
+    
+    print(sortedTracks, file=sys.stderr)
+    print('backend finishs sorting', file=sys.stderr)
+
     return jsonify({"sortedTracks": sortedTracks})
 
 
@@ -212,13 +219,14 @@ def sortTracks(tracks):
         trackName = track["name"]
         track_cover_url = track["cover_url"]
 
-        mostDominantColor = extract_dominant_color()
+        mostDominantColor = extract_dominant_color(track_cover_url)
 
         track_info = [trackId, trackName, track_cover_url, mostDominantColor]
         track_list.append(track_info)
     
-
-
+    # sort track list
+    track_list.sort(key=lambda track: step(*track[3], 8))
+    
     return track_list
 
 def extract_dominant_color(image_url, k=3):

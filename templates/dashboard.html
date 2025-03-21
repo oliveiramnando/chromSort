@@ -53,11 +53,13 @@
 
         <div id="playlist__card">
             <div class="header">
-                <div class="playlist__cover"></div>
-                <div class="title__section">
+                <div id="playlist__cover"></div>
+                <div id="title__section">
                     <div class="playlist__name"></div>
                     <div class="playlist__description"></div>
-                    <div id="sortButton"></div>
+                    <div id="sortButton__container">
+                        <button id="sortButton">Sort</button>
+                    </div>
                 </div>
             </div>
             <div id="track__section">
@@ -73,10 +75,12 @@
                 <div class="title__section">
                     <div class="playlist__name"></div>
                     <div class="playlist__description"></div>
-                    <div id="sortButton"></div>
                 </div>
             </div>
-            <div class="tracks">
+            <div id="sorted_track_section">
+                <div id="sorted_tracks">
+                    <div></div>
+                </div>
             </div>
         </div>
     </div>

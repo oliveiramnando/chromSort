@@ -171,6 +171,49 @@ h1 {
     margin-bottom: 2rem;
 }
 
+.header {
+    background-color: hsl(188, 19%, 75%);
+    height: 80px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    position: sticky;
+    top: 0;
+    z-index: 90;
+    margin-bottom: 1rem;
+}
+
+
+#sortButton__container{
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 10px 20px;
+    margin: 5px;
+    min-width: 100px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    color: white;
+    transition: background-color 0.25s ease;
+}
+
+#sortButton { 
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    background: #60a8b7;
+    color: #fff;
+    cursor: pointer;
+    font-family: source-code-pro,Menlo,Monaco,Consolas,Courier New,monospace;
+}
+
+#sortButton:hover {
+    background: #48D1CC;
+    transition: all 0.3s ease;
+}
+
 #playlist__tracks {
     color: #000;
     padding-top: 1rem;
