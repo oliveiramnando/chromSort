@@ -88,8 +88,10 @@ async function fetchTracks(playlistId) {
 
 async function sortPlaylist(playlistId) {
     try {
+        console.log("in sortPLaylist");
         const url = `http://localhost:8888/sort_playlist?playlist_id=${playlistId}`;
         const response = await fetch(url);
+        console.log("after fetching the sorted playlist");
 
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
@@ -105,21 +107,32 @@ async function sortPlaylist(playlistId) {
         trackList.innerHTML = "";
 
         //  NOTE: ITS NOT .tracks TRACKS ISNT A THINK ANYMORE BECAUSE I CHANGED IT
-        
-        if (!data.tracks || !Array.isArray(data.tracks) || data.tracks.length === 0) {
+        if (!data.sortedTracks || !Array.isArray(data.sortedTracks) || data.sortedTracks.length === 0) {
             trackList.innerHTML = "<p>No tracks found.</p>";
+            console.log("something went wrong");
             return;
         }
 
-        data.tracks.forEach(track => {
-            if (!track || !track.name || !track.cover_url) {
+        console.log("displaying playlist");
+
+        data.sortedTracks.forEach(track => {
+            if (!track || !track.trackName || !track.track_cover_url) {
                 console.warn("Skipping invalid track:", track);
+                if (!track){
+                    console.log("no track");
+                }
+                if (!track.trackName) {
+                    console.log("No track name");
+                }
+                if(!track.track_cover_url) {
+                    console.log("no track cover url");
+                }
                 return;
             }
 
             let div = document.createElement("div");
-            div.textContent = track.name;
-            div.style.backgroundImage = `url(${track.cover_url})`;
+            div.textContent = track.trackName;
+            div.style.backgroundImage = `url(${track.track_cover_url})`;
 
             trackList.appendChild(div);
         });
