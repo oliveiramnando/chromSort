@@ -116,7 +116,7 @@ async function sortPlaylist(playlistId) {
         console.log("displaying playlist");
 
         data.sortedTracks.forEach(track => {
-            if (!track || !track.trackName || !track.track_cover_url) {
+            if (!track || !track[1] || !track[2]) {
                 console.warn("Skipping invalid track:", track);
                 if (!track){
                     console.log("no track");
@@ -132,7 +132,7 @@ async function sortPlaylist(playlistId) {
 
             let div = document.createElement("div");
             div.textContent = track.trackName;
-            div.style.backgroundImage = `url(${track.track_cover_url})`;
+            div.style.backgroundImage = `url(${track[2]})`;
 
             trackList.appendChild(div);
         });
@@ -173,6 +173,7 @@ function sortedPopUP(playlistID) {
     console.log("sort button got clicked");
 
     sortPlaylist(playlistID);
+    console.log("after sorting");
 }
 
 fetchPlaylists();
