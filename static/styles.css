@@ -163,7 +163,6 @@ h1 {
 #playlist__card {
     display: none;
     width: 50rem;
-    /* height: 20rem;  */
     background: #E7EEEF;
     overflow-y: auto;
     border: 1px solid #ccc; 
@@ -245,10 +244,39 @@ h1 {
 #chromSorted {
     display: none;
     width: 50rem;
-    height: 20rem;
     background: #E7EEEF;
+    overflow-y: auto;
+    border: 1px solid #ccc; 
     border-radius: 10px;
     margin-bottom: 2rem;
+}
+
+#addButton__container{
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 10px 20px;
+    margin: 5px;
+    min-width: 100px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    color: white;
+    transition: background-color 0.25s ease;
+}
+
+#addButton { 
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    background: #60a8b7;
+    color: #fff;
+    cursor: pointer;
+    font-family: source-code-pro,Menlo,Monaco,Consolas,Courier New,monospace;
+}
+
+#addButton:hover {
+    background: #48D1CC;
+    transition: all 0.3s ease;
 }
 
 #sorted__tracks {

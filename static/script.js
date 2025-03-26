@@ -106,7 +106,6 @@ async function sortPlaylist(playlistId) {
         console.log("setting innerHTML to ''");
         trackList.innerHTML = "";
 
-        //  NOTE: ITS NOT .tracks TRACKS ISNT A THINK ANYMORE BECAUSE I CHANGED IT
         if (!data.sortedTracks || !Array.isArray(data.sortedTracks) || data.sortedTracks.length === 0) {
             trackList.innerHTML = "<p>No tracks found.</p>";
             console.log("something went wrong");
@@ -174,6 +173,23 @@ function sortedPopUP(playlistID) {
 
     sortPlaylist(playlistID);
     console.log("after sorting");
+}
+
+async function addSortedPlaylist(playlistId) {
+    try {
+        const url = `http://localhost:8888/add_playlist?playlist_id=${playlistId}`;
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        
+        console.log("finished adding playlist");
+    }
+    catch (error) {
+        console.error("Error adding playlist:", error);
+    }
 }
 
 fetchPlaylists();

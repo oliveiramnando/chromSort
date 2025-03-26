@@ -24,13 +24,11 @@ app = Flask(__name__)
 
 tracks_cache = {}
 
-
 def generate_random_string(length=16):
     return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
 
 
 STATE_KEY = "spotify_auth_state"
-
 
 @app.route("/login")
 def login():
@@ -173,6 +171,7 @@ def get_tracks():
             for item in data["items"]:
                 track = item.get("track")
                 if track:
+                    # NOTE: extract most dominant color during this process, save time
                     track_info = {
                         "id": track.get("id"),
                         "name": track.get("name"),
@@ -190,7 +189,7 @@ def get_tracks():
 def sort_playlist():
     """Sorts current selected playlistt"""
 
-    print('backend begins to sort', file=sys.stderr)
+    # print('backend begins to sort', file=sys.stderr)
     
     playlist_id = request.args.get("playlist_id")
     if not playlist_id:
@@ -204,17 +203,15 @@ def sort_playlist():
 
     tracksToSort = tracks_cache[playlist_id]["tracks"]
     sortedTracks = sortTracks(tracksToSort)
-
     
-    print(sortedTracks, file=sys.stderr)
-    print('backend finishs sorting', file=sys.stderr)
+    # print(sortedTracks, file=sys.stderr)
+    # print('backend finishs sorting', file=sys.stderr)
 
     return jsonify({"sortedTracks": sortedTracks})
 
-
 def sortTracks(tracks):
     track_list = []
-    for track in tracks:
+    for track in tracks: # this is slow and not efficient
         trackId = track["id"]
         trackName = track["name"]
         track_cover_url = track["cover_url"]
@@ -259,7 +256,6 @@ def extract_dominant_color(image_url, k=3):
         print(f"Error processing {image_url}: {e}")
         return None
 
-
 def step(r, g, b, repetitions=1):
     lum = math.sqrt(0.241 * r + 0.691 * g + 0.068 * b) 
 
@@ -274,6 +270,42 @@ def step(r, g, b, repetitions=1):
         lum2 = repetitions - lum2 
 
     return (h2, lum2, v2)
+
+
+@app.route("/add_playlist")
+def add_playlist():
+    """Adds current sorted playlistt"""
+
+    with open("tokens.txt", "r") as f:
+        tokens = dict(line.strip().split("=") for line in f)
+        
+    access_token = tokens.get("ACCESS_TOKEN")
+    headers = {"Authorization": f"Bearer {access_token}"}
+
+    me_response = requests.get("https://api.spotify.com/v1/me", headers=headers)
+    if me_response.status_code != 200:
+        return "Failed to get user info"
+    user_id = me_response.json().get("id")
+
+    newPlaylist = {
+        "name": "[chromSorted] {playlist_name}",
+        "description": "color sorted",
+        "public": True
+    }
+    create_response = requests.post(
+        f"https://api.spotify.com/v1/users/{user_id}/playlists",
+        headers=headers,
+        json=newPlaylist
+    )
+
+    if create_response.status_code != 201:
+        return "Failed to create playlist"
+
+    playlist_id = create_response.json().get("id")
+
+    # Add tracks
+
+    return f"Playlist created: {playlist_id}"
 
 
 if __name__ == "__main__":
